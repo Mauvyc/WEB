@@ -1,0 +1,2375 @@
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+Facultad de Ingeniería de Sistemas e Informática
+Escuela de Ingeniería de Sistemas
+
+RIMAC Seguros
+Documento de arquitectura de RIMAC Seguros en su proceso de negocio
+Siniestro Vehicular
+
+Grupo 3
+Integrantes:
+- Castillo Reupo John Luis Alberto [22200117]
+- Aldana Chipana Mauricio [22200164]
+- Espíritu Unsihuay Erika Milagros [22200170]
+- Valdiviezo Goicochea Wisner Ernan [22200217]
+- Escribas Alan Daniel Leonardo [22200057]
+
+Docente
+Armando David Espinoza Robles
+Ciclo
+2024 - II
+Lima, Perú
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+Índice
+1. Introducción ...................................................................................................................................... 4
+
+1.1. Propósito ....................................................................................................................... 4
+2. Representación Arquitectónica........................................................................................... 5
+3. Metas y Restricciones arquitectónicas ............................................................................... 6
+3.1. Restricciones ................................................................................................................. 6
+4. Vista de Casos de Uso .......................................................................................................... 7
+4.2. Identificación de los procesos de negocios ................................................................... 7
+4.2.1. Gestión de Siniestro Vehicular ......................................................................... 7
+
+4.2.2. Gestión de seguros de salud ................................................................................. 7
+4.2.3. Gestión de seguros de vida .................................................................................. 7
+4.2.4. Gestión de seguros de hogar ................................................................................ 7
+4.2.5. Gestión de seguros corporativos .......................................................................... 7
+4.3. Procesos de negocio relevantes para el sistema ............................................................ 8
+4.4.1. Proceso de negocio Gestión de Siniestro Vehicular .................................................. 8
+4.5. Modelo de dominio ....................................................................................................... 8
+4.6. Identificar a los actores ................................................................................................. 8
+4.7. Casos de uso relevantes organizado por paquetes ........................................................ 9
+4.8. Descripción de los casos de uso .................................................................................... 9
+4.8.1. CUS-001: Presentar siniestro .......................................................................... 9
+4.8.2. CUS-002: Ingresar reclamación ..................................................................... 12
+4.8.3. CUS-003: Gestionar seguimiento de siniestro ............................................... 15
+4.8.4. CUS-003: Asignar taller a siniestro ................................................................ 16
+4.8.5. Validar datos de póliza .................................................................................. 19
+4.8.6. CUS-006: Mantener Usuario.......................................................................... 21
+4.8.7. CUS-007: Gestionar Presupuesto.................................................................. 23
+4.8.8. CUS-008: Gestionar pagos de indemnización ............................................... 25
+4.8.9. CUS-009: Generar reporte............................................................................. 27
+4.8.10. CUS-010: Gestión de talleres y proveedores ............................................... 30
+
+4.9. Interfaz de Usuario ......................................................................................................... 34
+4.9.1. CUS-001: Presentar siniestro ............................................................................. 34
+4.9.2. CUS-002: Ingresar reclamación ......................................................................... 35
+4.9.3. CUS-003: Gestionar seguimiento de siniestro ................................................... 35
+4.9.4. CUS-004: Asignar taller a siniestro ................................................................... 36
+4.9.5. CUS-005: Validar datos de póliza ..................................................................... 36
+4.9.6. CUS-006: Mantener Usuario ............................................................................. 37
+4.9.7. CUS-007: Gestionar Presupuesto ...................................................................... 37
+4.9.8. CUS-008: Gestionar pagos de indemnización ................................................... 38
+4.9.9. CUS-009: Generar reporte ................................................................................. 38
+4.9.10. CUS-010: Gestión de talleres y proveedores ................................................... 39
+5. Vista lógica.......................................................................................................................... 40
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+5.2. Arquitectura lógica de la aplicación ........................................................................... 42
+5.3. Identificación de las clases del diseño ........................................................................ 42
+5.3.1.1. CUS-001: Presentar siniestro .......................................................................... 43
+5.3.1.2. CUS-002: Ingresar reclamación ...................................................................... 43
+5.3.1.3. CUS-003: Gestionar seguimiento de siniestro ................................................ 44
+5.3.1.4. CUS-004: Asignar taller a siniestro ................................................................ 44
+5.3.1.5. CUS-005: Validar datos de póliza .................................................................. 45
+5.3.1.6. CUS-006: Mantener Usuario .......................................................................... 45
+5.3.1.7. CUS-007: Gestionar Presupuesto ................................................................... 46
+5.3.1.8. CUS-008: Gestionar pagos de indemnización ................................................ 47
+5.3.1.9. CUS-009: Generar reporte .............................................................................. 47
+5.3.1.10. CUS-010: Gestión de talleres y proveedores ................................................ 48
+5.3.2. Diagrama de subsistemas ............................................................................................ 49
+5.4. Agrupación de clases de diseño en subsistema del paquete Gestión de siniestros .... 50
+5.5. Agrupación de clases de diseño en subsistema del paquete Gestión de Usuarios y
+Pólizas........................................................................................................................................ 1
+5.6. Agrupación de clases de diseño en subsistema del paquete Subsistema de Gestión de
+Talleres y Asegurados .............................................................................................................. 1
+5.7. Agrupación de clases de diseño en subsistema del paquete Gestión de Presupuestos e
+Indemnizaciones ........................................................................................................................ 1
+5.8. Agrupación de clases de diseño en subsistema del paquete Gestión de Proveedores y
+Talleres ...................................................................................................................................... 1
+6. Vista despliegue .................................................................................................................... 1
+7. Vista de implementación ..................................................................................................... 1
+8. Vista de datos.................................................................................................................. 1
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+1.
+
+Introducción
+En este documento detalla la arquitectura del sistema de gestión de siniestros
+
+vehiculares de Rímac Seguros, diseñado para automatizar y optimizar los procesos de
+presentación, seguimiento y resolución de siniestros. Rímac Seguros, líder en el mercado de
+seguros en Perú, se encuentra en una constante búsqueda de innovar sus servicios a través de
+la tecnología. La implementación de este sistema responde a la necesidad de brindar una
+experiencia integral, ágil y eficiente tanto para asegurados como para el personal de la empresa.
+Este documento sigue una estructura de modelo arquitectónico en capas (Presentación,
+Negocio y Persistencia), asegurando modularidad y escalabilidad en el manejo de siniestros
+vehiculares.
+
+1.1.
+
+Propósito
+
+El propósito del sistema de gestión de siniestros vehiculares de Rímac Seguros es
+optimizar las operaciones de registro y administración de siniestros, asegurando una
+experiencia de usuario fluida y eficiente. Este sistema permitirá a los asegurados presentar
+siniestros y realizar reclamaciones de manera rápida y segura, al mismo tiempo que facilitará
+al personal de Rímac la asignación de talleres y la gestión de presupuestos e indemnizaciones,
+reduciendo así el tiempo de atención y mejorando la calidad del servicio ofrecido.
+
+1.2.
+
+Alcance
+
+El objetivo principal del sistema es gestionar de manera eficiente las operaciones de
+Rímac Seguros, una empresa líder en el mercado de seguros peruano. El sistema proporcionará
+herramientas para mejorar la experiencia del cliente, optimizar la gestión de pólizas, y facilitar
+la administración de siniestros y riesgos.
+
+1.3.
+
+CUS
+
+Definiciones, Siglas, y Abreviaturas
+
+Caso de Uso del Sistema.
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+Rimac Seguros
+
+Empresa aseguradora que provee cobertura
+de siniestros vehiculares, seguros de vida,
+salud y hogar en Perú.
+
+Asegurado
+
+Persona física o jurídica que cuenta con una
+póliza activa emitida por Rímac Seguros.
+
+Siniestro
+
+Evento de pérdida o daño cubierto bajo una
+póliza de seguro.
+
+Póliza
+
+Documento que define el contrato de seguro,
+sus coberturas y condiciones.
+
+Indemnización
+
+Compensación económica que la
+aseguradora otorga al asegurado en caso de
+siniestro.
+
+2.
+
+Representación Arquitectónica
+El sistema será una aplicación integrada, donde solo los usuarios registrados tendrán
+
+acceso, a través de una interfaz gráfica que forma parte de la capa de presentación. Esta capa
+se comunica con la capa de Lógica de Negocio, que es responsable de procesar las solicitudes
+del usuario y, a su vez, interactúa con la capa de Persistencia para recuperar y almacenar datos
+en la base de datos. Además, la arquitectura se estructurará siguiendo el modelo 4+1.
+Vista de Casos de Uso: Describir los principales casos de uso, como el registro de
+siniestro, validación de datos de póliza, asignación de talleres y gestión de indemnizaciones.
+Vista Lógica: Presentar los componentes y paquetes de cada capa, mostrando cómo
+están organizados en módulos como “Gestión de Siniestro”, “Gestión de Usuario y Póliza”,
+“Gestión de Talleres y Asegurados”, etc.
+Vista de Procesos: Detallar cómo fluyen los datos entre las capas. Por ejemplo, un
+usuario presenta un siniestro (capa de presentación), el sistema valida la información (capa de
+aplicación) y luego registra los datos en la base de datos (capa de persistencia).
+Vista de Implementación: Describir las tecnologías específicas de cada capa, como
+ASP.NET en la capa de presentación y lógica, y SQL Server para la capa de persistencia.
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+Vista de Despliegue: Indicar la infraestructura de despliegue, como servidores web,
+servidores de base de datos y redes que soportan el sistema.
+
+Este enfoque permite un desarrollo modular y flexible, asegurando que el sistema
+cumpla con los requisitos de escalabilidad, seguridad y disponibilidad que demanda la gestión
+de siniestros vehiculares.
+
+3.
+
+Metas y Restricciones arquitectónicas
+Para poder acceder al Sistema de Siniestro vehicular, es necesario que lo usuarios
+
+posean una cuenta. Además,depende del perfil del usuario, para tener acceso a ciertas opciones
+que se relacionan con la empresa o con el usuario.
+
+3.1.
+
+Restricciones
+
+Base de Datos: El sistema usará como motor de base de datos Microsoft SQL-Server
+Management Studio 20 debido a la compatibilidad con los sistemas operativos y su capacidad
+para manejar grandes volúmenes de datos de manera eficiente.
+Navegadores Compatibles: El sistema será compatible únicamente con Google
+Chrome (versión 90 o superior), Mozilla Firefox (versión 80 o superior) y Microsoft Edge
+(versión 88 o superior). Otros navegadores no serán soportados oficialmente para asegurar la
+integridad y consistencia de la interfaz de usuario.
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.
+
+Vista de Casos de Uso
+
+4.1.
+
+Descripción del Negocio
+
+Rímac Seguros, líder en el mercado de seguros peruano y respaldada por el
+grupo Breca, se destaca por su solidez financiera, ofreciendo una amplia gama de
+productos que incluyen seguros vehiculares, de salud, vida, hogar y corporativos. La
+empresa se enfoca en la innovación tecnológica, mejorando la experiencia del cliente
+mediante plataformas digitales y aplicaciones móviles. En 2023, Rímac aumentó la
+suscripción de primas y redujo la siniestralidad, manteniendo sólidos indicadores de
+solvencia. Identificar y mitigar riesgos de mercado, operativos, financieros y externos
+a través de estrategias de monitoreo regulatorio, inversión en tecnología y
+diversificación de inversiones. Rímac implementa una transformación digital integral,
+desarrolla nuevos modelos de negocio, fomenta una cultura centrada en el cliente y
+busca diversificación e internacionalización para mantener su liderazgo y expandirse a
+nuevas oportunidades de mercado.
+4.2.
+
+Identificación de los procesos de negocios
+4.2.1.
+4.2.2.
+4.2.3.
+4.2.4.
+4.2.5.
+
+Gestión de Siniestro Vehicular
+Gestión de seguros de salud
+Gestión de seguros de vida
+Gestión de seguros de hogar
+Gestión de seguros corporativos
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.3.
+
+Procesos de negocio relevantes para el sistema
+4.4.
+Descripción del procesos de negocio relevantes para el sistema
+4.4.1.
+Proceso de negocio Gestión de Siniestro Vehicular
+
+4.5.
+
+Modelo de dominio
+
+4.6.
+
+Identificar a los actores
+
+Asegurado
+
+Usuario del sistema que tiene una póliza de seguro
+activa y puede registrar siniestros, hacer seguimiento
+de los mismos y presentar reclamaciones.
+
+Personal de Rímac Seguros
+
+Empleado de la aseguradora encargado de validar
+datos, gestionar usuarios y asignar talleres para los
+siniestros vehiculares.
+
+Administrador
+
+Usuario con privilegios avanzados que puede gestionar
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+los presupuestos, pagos de indemnizaciones y el
+registro de nuevos talleres y proveedores en el sistema.
+
+4.7.
+
+Casos de uso relevantes organizado por paquetes
+4.7.1.
+Paquete Negocio Principal
+
+4.8.
+
+Descripción de los casos de uso
+4.8.1.
+CUS-001: Presentar siniestro
+
+ID
+
+CUS-001
+
+Actor
+
+Asegurado
+
+Caso de Uso
+
+Presentar siniestro
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+Descripción
+
+Este caso de uso permite al asegurado registrar un siniestro vehicular a
+través del sistema. El asegurado debe proporcionar información detallada
+sobre el siniestro, como la fecha, hora, ubicación del incidente y el tipo de
+siniestro (pérdida total , robo, choque, daños menores). Asimismo, puede
+adjuntar cualquier documento que considere de importancia para su
+justificación.
+
+Precondición
+
+El usuario debe estar registrado como asegurado en el sistema de Rímac
+Seguros.
+
+Flujo Básico
+1. El CUS comienza cuando el asegurado indica la opción “Presentar siniestro".
+2. El sistema muestra un formulario para que el asegurado complete la información del
+siniestro.
+3. El asegurado completa los campos requeridos en el formulario:
+- Ingresa la placa del vehículo
+- Selecciona el tipo de siniestro(pérdida total, robo, choque, daños menores).
+- Ingresa fecha y hora del incidente.
+- Proporciona ubicación del siniestro.
+- Describe brevemente los hechos ocurridos durante el siniestro.
+4. El asegurado adjunta archivos (fotos, documentos) relevantes para el caso.
+5. El asegurado indica la opción registrar siniestro
+6. El sistema muestra un mensaje de confirmación.
+7. El asegurado indica “Confirmar”
+8. El CUS finaliza exitosamente.
+Flujo alterno
+
+En el paso 3, el asegurado no completa todos los campos obligatorios y
+presiona "Presentar siniestro":
+
+1. El sistema notifica que hay campos obligatorios pendientes
+2. El asegurado completa la información faltante
+3. El flujo continua en el paso 4.
+Postcondición
+
+El siniestro queda registrado en el sistema y disponible para revisión y
+procesamiento por parte
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.8.2.
+
+CUS-002: Ingresar reclamación
+
+ID
+
+CUS-002
+
+Actor
+
+Asegurado
+
+Caso de Uso
+
+Ingresar reclamación
+
+Descripción
+Este caso de uso permite al asegurado ingresar una reclamación a
+través del sistema. El asegurado puede acceder a la interfaz para
+emitir una reclamación sobre un siniestro vehicular previamente
+registrado, proporcionando detalles relevantes del reclamo,
+adjuntando documentos justificativos.
+Precondición
+
+El usuario debe estar registrado como asegurado en el sistema de
+Rímac Seguros.Asimismo debe haber un siniestro registrado
+previamente relacionado con la reclamación.
+
+Flujo Básico
+1. El CUS comienza cuando el asegurado indica la opción “Ingresar
+reclamación".
+2. El sistema muestra un formulario para que el asegurado complete la
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+información de la reclamación.
+3. El asegurado completa los campos requeridos en el formulario:
+a. Selecciona el siniestro relacionado.
+b. Describe el reclamo.
+4. El asegurado adjunta archivos (fotos, documentos) relevantes para el caso,
+utilizando el botón “subir documentos”.
+5. El asegurado revisa y confirma que la información ingresada es correcta.
+6. El asegurado presiona "Enviar reclamación".
+7. El sistema muestra un mensaje de confirmación.
+8. El asegurado indica “Confirmar”
+9. El CUS finaliza exitosamente.
+Flujo alterno
+
+En el punto 4, si el asegurado no completa todos los campos
+obligatorios y selecciona "Enviar reclamación":
+
+1. El sistema notifica que hay campos obligatorios pendientes
+2. El asegurado completa la información faltante
+3. El flujo continua en el paso 6.
+Postcondición
+
+La reclamación queda registrada en el sistema y está disponible
+para revisión por parte del personal autorizado.
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.8.3.
+
+CUS-003: Gestionar seguimiento de siniestro
+
+ID
+
+CUS-003
+
+Actor
+
+Asegurado
+
+Caso de Uso
+
+Gestionar seguimiento de siniestro
+
+Descripción
+
+Este caso de uso permite al asegurado consultar el estado y
+seguimiento de un siniestro vehicular previamente registrado. El
+asegurado ingresa el número de placa del vehículo y, tras realizar
+la búsqueda, el sistema muestra el detalle de las etapas del
+siniestro, como el registro inicial, la verificación, la evaluación de
+daños, y el estado del pago de indemnización y reclamaciones.
+
+Precondición
+
+El usuario debe estar registrado como asegurado en el sistema de
+Rímac Seguros.Asimismo debe haber registrado previamente un
+siniestro vehicular en el sistema.
+
+Flujo Básico
+1. El CUS comienza cuando el asegurado indica la opción “Gestionar
+seguimiento".
+2. El sistema muestra una primera interfaz donde el asegurado debe ingresar la
+placa del vehículo.
+3. El asegurado ingresa la placa del vehículo y selecciona "Buscar".
+4. El sistema muestra una segunda interfaz con el estado actual del siniestro
+vehicular, incluyendo:
+- Registro inicial
+- Verificación
+- Evaluación de daños
+- Estado de aprobación
+- Estado de indemnización
+- Estado de las reclamaciones
+5. El CUS finaliza exitosamente.
+Flujo alterno
+
+En el paso 4, si el asegurado ingresa una placa que no está
+registrada en el sistema:
+
+1. El sistema notifica que hay campos obligatorios pendientes
+2.El asegurado corrige la información y vuelve a intentar.
+3. El flujo continua en el paso 4.
+Postcondición
+El asegurado puede visualizar el seguimiento detallado de su
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+siniestro, las etapas completadas, y aquellas pendientes.
+
+4.8.4.
+
+CUS-003: Asignar taller a siniestro
+
+ID
+
+CUS-004
+
+Actor
+
+Personal
+
+Caso de Uso
+
+Asignar taller a siniestro
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+Descripción
+
+Este caso de uso permite al personal de la empresa asignar un taller
+a un siniestro vehicular que lo requiera (como en los casos de
+colisión o daños menores). El proceso consta de tres interfaces en
+las que el personal interactúa para buscar el siniestro, seleccionar
+un taller de los proveedores asociados, y confirmar la asignación
+del taller.
+
+Precondición
+
+El usuario debe estar registrado como Personal en el sistema de
+Rímac Seguros.
+
+Flujo Básico
+1. El CUS comienza cuando el asegurado indica la opción “Asignar taller a
+siniestro".
+2. El sistema muestra una interfaz para que el personal ingrese el código del
+siniestro.
+3. El sistema muestra los detalles del siniestro y la lista de talleres disponibles
+con su capacidad y disponibilidad.
+4. El personal selecciona el taller más adecuado en base a la proximidad,
+capacidad y disponibilidad.
+5. El sistema muestra los detalles del taller seleccionado.
+6. El personal presiona para confirmar la asignación del siniestro.
+7. El CUS finaliza exitosamente.
+Flujo alterno
+
+En el paso 3, si el siniestro es de un tipo que no requiere taller:
+
+1. El sistema muestra un mensaje indicando que no se necesita asignar un taller para
+este siniestro.
+2. El CUS finaliza.
+Flujo alterno
+
+En el punto 4, si no hay talleres disponibles
+
+1. El sistema notifica al personal que no hay talleres disponibles.
+2. El personal puede enviar una solicitud de atención prioritaria a un proveedor.
+3. El sistema registra la solicitud y muestra una confirmación.
+Postcondición
+
+El siniestro queda registrado en el sistema y disponible para
+revisión y procesamiento por parte del personal autorizado
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.8.5.
+
+Validar datos de póliza
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+ID
+
+CUS-005
+
+Actor
+
+Personal
+
+Caso de Uso
+
+Validar datos de póliza
+
+Descripción
+
+Este caso de uso permite al personal de la aseguradora revisar y
+validar la información asociada a la póliza de un asegurado para
+determinar su vigencia, cobertura y estado. El sistema
+proporcionará una interfaz para verificar los detalles de la póliza
+de manera automatizada,
+
+Precondición
+
+El asegurado debe contar con una póliza vigente registrada en el
+sistema. El personal debe haber iniciado con sus credenciales al
+sistemas para acceder a esta información.
+
+Flujo Básico
+1.El personal selecciona la opción validar datos de póliza en el menú principal
+2.El sistema muestra una lista con las pólizas disponibles, incluyendo opciones de
+búsqueda por DNI o número de póliza para facilitar la búsqueda.
+3.El personal ingresa el número de póliza o selecciona un asegurado de la lista de
+asegurado utilizando su DNI.
+4.El sistema muestra los detalles de la póliza, incluyendo:
+● Vigencia (fecha de inicio y fin)
+● Cobertura (tipos de siniestros cubiertos, montos)
+● Estado de cuenta (pagos al día, pendientes)
+5.El actor revisa los detalles y confirma si la póliza es válida.
+6.El actor confirma que la póliza es válida.
+7. El personal presiona el botón de validar póliza
+8.El sistema procesa la validación
+9. El sistema muestra el mensaje de póliza validada correctamente
+
+Flujo alterno
+
+Número de póliza inexistente
+
+1.El actor ingresa un número de póliza o dni pero este no existe en la base de datos
+2.El sistema notifica que el número de póliza no es válido
+3El sistema ofrece al actor la opción de:
+Buscar otra póliza ingresando un nuevo número de póliza o DNI.
+Salir del flujo de trabajo.
+4,El actor selecciona una de las opciones y el flujo se ajusta en consecuencia.
+Postcondición
+
+La póliza queda registrada como validada en el sistema
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.8.6.
+
+CUS-006: Mantener Usuario
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+ID
+
+CUS-006
+
+Actor
+
+Personal
+
+Caso de Uso
+
+Mantener Usuario
+
+Descripción
+
+Este caso de uso permite al personal de la aseguradora gestionar la
+información de los clientes asegurados en el sistema. Las tareas
+incluyen la creación, modificación, desactivación y eliminación de
+registros de clientes asegurados. La gestión es necesaria para
+mantener actualizada la base de datos de clientes y asegurados.
+
+Precondición
+
+El personal debe estar logueado o haber iniciado sesión con sus
+credenciales en el sistema.
+
+Flujo Básico
+1. El actor selecciona la opción "Mantener Usuario" en el menú de
+administración.
+2. El sistema muestra una lista de los clientes asegurados registrados en la base
+de datos, con opciones de búsqueda y filtros.
+3. El actor selecciona la opción "Agregar usuario".
+4. El sistema presenta un formulario para ingresar los siguientes datos del
+nuevo cliente asegurado:
+a. Nombre completo.
+b. DNI.
+c. Correo electrónico.
+d. Dirección.
+e. Teléfono de contacto.
+f. Contraseña inicial (el sistema genera una automáticamente o el actor
+define una).
+5. El actor completa el formulario y presiona Registrar vehiculo.
+6. El sistema valida la información ingresada y crea el nuevo registro del
+cliente asegurado en la base de datos.
+7. El sistema muestra una notificación indicando que el cliente asegurado ha
+sido creado correctamente.
+8. El sistema muestra otra interfaz RegistrarVehiculo
+9. El actor llena el formulario donde se piden datos como:
+a. Placa del vehículo
+b. Marca
+c. Modelo
+d. Tipo de vehículo
+e. Número de tarjeta de vehiculo
+10. El actor envía el formulario
+11. El sistema valida los datos ingresados y crea el vehículo ligado a ese
+beneficiario
+12. El sistema redirige al actor a la interfaz principal
+Flujo alterno
+
+Usuario ya existente al agregar:
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+1. El actor intenta agregar un nuevo cliente cuyo DNI o correo electrónico ya
+está registrado en el sistema, el sistema muestra un mensaje de error
+indicando que el cliente ya existe.
+2. El actor tiene la opción de modificar los datos ingresados o salir del flujo.
+Flujo alterno
+
+Modificar usuario asegurado
+
+1. El actor selecciona un cliente asegurado de la lista y presiona "Modificar
+usuario".
+2. El sistema permite al actor modificar detalles del cliente asegurado, como
+nombre, correo electrónico, dirección, etc.
+3. El actor realiza los cambios necesarios y presiona Guardar.
+4. El sistema actualiza los datos del cliente asegurado en la base de datos.
+5. El sistema muestra una notificación indicando que los cambios han sido
+guardados correctamente.
+Flujo alterno
+
+Eliminar usuario asegurado:
+
+1. El actor selecciona un cliente asegurado de la lista y presiona "Eliminar
+usuario".
+2. El sistema solicita confirmación antes de eliminar el cliente asegurado.
+3. El actor confirma la acción y el sistema marca al cliente como eliminado o lo
+elimina de la base de datos.
+4. El sistema muestra una notificación indicando que el cliente ha sido
+eliminado correctamente.
+Postcondición
+
+los datos del cliente asegurado han sido gestionados correctamente
+en el sistema
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.8.7.
+
+CUS-007: Gestionar Presupuesto
+
+ID
+
+CUS-007
+
+Actor
+
+Administrador
+
+Caso de Uso
+
+Gestionar presupuesto
+
+Descripción
+
+Este caso de uso permite al administrador gestionar los
+presupuestos asociados a los siniestros vehiculares. El
+administrador puede revisar, ajustar y aprobar los presupuestos
+antes de proceder con pagos o ajustes de indemnizaciones.
+
+Precondición
+
+El administrador debe estar logueado o haber iniciado sesión con
+sus credenciales en el sistema.
+
+Flujo Básico
+1.
+
+El administrador selecciona la opción "Gestionar Presupuesto" en el menú
+principal del sistema.
+2. El sistema muestra una lista de siniestros vehiculares con sus respectivos
+presupuestos asociados.
+3. El administrador puede buscar un presupuesto específico utilizando filtros
+como número de siniestro, nombre del cliente asegurado, o estado del
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+presupuesto.
+4. El administrador selecciona un siniestro de la lista para revisar el
+presupuesto detallado.
+5. El sistema presenta un desglose del presupuesto, que incluye:
+a. Costos de reparación (estimados y confirmados).
+b. Costo de piezas y mano de obra.
+c. Presupuesto total solicitado.
+6. El administrador revisa cada ítem para asegurarse de que los costos sean
+correctos y correspondan al siniestro.
+7. El sistema permite la edición de los campos mostrados
+8. El administrador presiona el botón validar presupuesto
+9. El sistema Actualiza el estado del siniestro a "Presupuesto Aprobado".
+10. El sistema muestra un mensaje de confirmación que indica que el
+presupuesto ha sido aprobado correctamente.
+Flujo alterno
+
+Presupuesto incompleto:
+
+1. El sistema muestra un mensaje de advertencia indicando los campos que
+necesitan corrección (por ejemplo, costo de piezas o mano de obra faltante).
+2.
+3. El administrador revisa los campos indicados, ingresa la información
+faltante o corrige los datos erróneos.
+4. El administrador: Vuelve a presionar el botón "Validar Presupuesto".
+5. El sistema muestra mensaje de confirmación
+Postcondición
+
+El presupuesto ha sido gestionado correctamente en el sistema.
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.8.8.
+
+CUS-008: Gestionar pagos de indemnización
+
+ID
+
+CUS-008
+
+Actor
+
+Administrador
+
+Caso de Uso
+
+Gestionar pagos de indemnización
+
+Descripción
+
+El administrador también tiene la potestad de enviar el pago al
+asegurado luego de la revisión y aprobación del presupuesto
+
+Precondición
+
+El usuario debe estar registrado como administrador en el
+sistema de Rímac Seguros.
+
+Flujo Básico
+
+1. El usuario inicia sesión en el sistema con sus credenciales.
+2. El usuario selecciona la opción “Gestionar pagos de indemnización” en el
+menú principal del sistema.
+3. El sistema muestra la interfaz procesar pago de indemnización
+4. El usuario selecciona esta opción
+5. El sistema muestra una lista de siniestros vehiculares donde se muestra
+cuánto de dinero se les debe pagar, con una columna diciendo “pendiente” y
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+un botón “pagar”
+6. El usuario selecciona la opción de “pagar”
+7. El sistema se encarga de validar si es que el presupuesto ha sido aprobado
+8. El sistema actualiza el estado de su siniestro a pagado
+9. El sistema muestra un mensaje de éxito
+10. El usuario sale de la interfaz
+Flujo alterno 1:
+
+En el paso 1, el administrador intenta iniciar sesión, pero hay un
+problema con las credenciales o los permisos.
+
+1. El administrador tiene la opción de reintentar iniciar sesión
+2. Se sigue al punto 2 del flujo básico
+Flujo alterno 2:
+
+En el paso 5, puede que en la columna ya salga como pagado,
+entonces no sería necesario hacer más.
+
+1. El usuario sale de la interfaz.
+2. El CUS finaliza
+Flujo alterno 3:
+
+En el paso 7 si el presupuesto aún no ha sido aprobado, no se
+puede realizar el pago de los siniestros
+
+1. El sistema muestra un mensaje al administrador indicando que el
+presupuesto aún no está disponible,
+2. El usuario sale de la interfaz.
+3. Se regresa al punto 3 del flujo básico
+Postcondición
+
+El pago de los siniestros se realizó con éxito
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.8.9.
+
+CUS-009: Generar reporte
+
+ID
+
+CUS-009
+
+Actor
+
+Administrador
+
+Caso de Uso
+
+Generar reporte
+
+Descripción
+
+Permite al administrador generar un reporte que contiene la
+información del estado del vehículo y los detalles sobre la
+atención del siniestro. El objetivo es evaluar el tiempo de
+respuesta, los recursos asignados y la efectividad del proceso de
+atención. Además de documentos necesarios para la posterior
+evaluación del siniestro y posible pago por indemnización.
+
+Precondición
+
+El usuario debe estar registrado como administrador en el
+sistema de Rímac Seguros.
+
+Flujo Básico
+
+1. El administrador inicia sesión en el sistema con sus credenciales.
+2. El administrador selecciona la opción “Solicitar generación de reporte” en el
+menú principal del sistema.
+3. El sistema muestra una lista de siniestros recientes que pueden ser
+seleccionados para la generación de un reporte.
+4. El administrador elige un siniestro específico para generar el reporte
+5. El administrador solicita la generación del reporte.
+6. El sistema evalúa los datos ingresados y valida que toda la información
+necesaria esté disponible.
+7. El sistema presenta el reporte al administrador, ya sea en formato
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+descargable o en pantalla. El reporte contendrá datos como el taller al que ha
+sido asignado y los costos de mantenimiento que conlleva en caso de que
+haya sido ingresado por daños. Ademas de informacion relacionada al
+siniestro subida por el propio asegurado
+8. El administrador revisa el reporte generado
+9. Finaliza el caso de uso.
+Flujo alterno 1:
+
+En el paso 1, el administrador intenta iniciar sesión, pero hay un
+problema con las credenciales o los permisos.
+
+3. El administrador tiene la opción de reintentar iniciar sesión
+4. Se sigue al punto 2 del flujo básico
+Flujo alterno 2:
+
+En el paso 3, si no se encuentran siniestros recientes para generar
+el reporte
+
+3. El sistema muestra un mensaje al administrador indicando que no hay
+siniestros recientes disponibles para generar el reporte.
+4. El CUS finaliza
+Flujo alterno 3:
+
+En el paso 6, si el sistema detecta que falta información para
+generar el reporte.
+
+4. El sistema muestra un mensaje al administrador indicando qué información
+es necesaria para completar el proceso,
+5. El administrador puede corregir la información en ese momento.
+6. Se regresa al punto 7 del flujo basico
+Postcondición
+
+El reporte se ha generado correctamente.
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.8.10.
+
+CUS-010: Gestión de talleres y proveedores
+
+ID
+
+CUS-010
+
+Actor
+
+Administrador
+
+Caso de Uso
+
+Gestión de talleres y proveedores
+
+Descripción
+
+El administrador es el encargado de gestionar y registrar nuevos
+proveedores y talleres dentro de la base de datos en caso el
+siniestro lo requiera cuando se solicite.
+
+Precondición
+
+El administrador debe iniciar sesión con sus credenciales dentro
+del sistema de Rímac Seguros.
+
+Flujo Básico
+1. El administrador selecciona la opción de “Gestión de talleres y
+proveedores” en la interfaz de administrador.
+2. El sistema muestra la lista de talleres y proveedores.
+Si el administrador selecciona la opción de “Añadir:
+3. El administrador completa el formulario con la información del nuevo
+taller y proveedor.
+4 . El administrador presiona el botón "Añadir".
+5. El sistema guarda los cambios.
+6. El sistema actualiza la lista de talleres y proveedores con los cambios
+realizados.
+7.El sistema confirma el registro.
+8. El CUS finaliza.
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+Si el administrador selecciona la opción “Eliminar”:
+3. El administrador selecciona un registro de la tabla.
+4. El administrador presiona el botón "Eliminar".
+5. El sistema pide confirmación para eliminar el registro.
+6. El administrador confirma la eliminación.
+7. El sistema elimina el registro.
+8. El sistema actualiza la lista de talleres y proveedores con los cambios
+realizados.
+9. El sistema confirma al administrador.
+10. El CUS finaliza.
+Si el administrador selecciona la opción “Editar”:
+3. El administrador selecciona un registro de la tabla.
+4. El administrador modifica los campos necesarios.
+5. El administrador presiona el botón "Editar".
+6. El sistema guarda los cambios.
+7. El sistema actualiza la lista de talleres y proveedores con los cambios
+realizados.
+8. El sistema confirma al administrador.
+9. El CUS finaliza.
+Flujo alterno 1:
+
+Al presionar el botón Añadir, en el punto 3. Si el administrador
+no completa todos los datos del formulario
+
+1.El sistema muestra un mensaje de error indicando los campos obligatorios
+que faltan por completar.
+2. El administrador completa los campos faltantes.
+3. El administrador guarda los cambios.
+4. Vuelve al punto.
+Flujo alterno 2:
+
+Al presionar el botón Editar. Si el administrador no llenó todos
+los datos del formulario
+
+1.El sistema valida los datos ingresados.
+2. El sistema muestra un mensaje de error indicando los campos obligatorios
+que faltan por completar.
+3. El administrador completa los campos faltantes.
+4. El administrador guarda los cambios nuevamente
+5. Vuelve al punto 5.
+Flujo alterno 3:
+
+Al presionar el botón Eliminar. Si el administrador no presiona
+ningún proveedor o taller de la lista
+
+7. El sistema muestra un mensaje al administrador indicando que el
+presupuesto aún no está disponible,
+8. El usuario sale de la interfaz.
+9. Se regresa al punto 3 del flujo básico
+Postcondición
+
+La información de talleres y proveedores queda actualizada en el
+sistema.
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.9.
+
+Interfaz de Usuario
+4.9.1.
+CUS-001: Presentar siniestro
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.9.2.
+
+CUS-002: Ingresar reclamación
+
+4.9.3.
+
+CUS-003: Gestionar seguimiento de siniestro
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.9.4.
+
+CUS-004: Asignar taller a siniestro
+
+4.9.5.
+
+CUS-005: Validar datos de póliza
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.9.6.
+
+CUS-006: Mantener Usuario
+
+4.9.7.
+
+CUS-007: Gestionar Presupuesto
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.9.8.
+
+CUS-008: Gestionar pagos de indemnización
+
+4.9.9.
+
+CUS-009: Generar reporte
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+4.9.10.
+
+CUS-010: Gestión de talleres y proveedores
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+5.
+
+Vista lógica
+5.1.
+Estilo arquitectónico
+
+Para el sistema de cronología del siniestro, se ha adoptado una arquitectura de tres capas: Capa de
+Presentación, Capa de Negocio y Capa de Persistencia. Esta arquitectura permite una clara separación
+de responsabilidades entre la interfaz de usuario, la lógica de negocio y el almacenamiento de datos.
+El principal beneficio de este enfoque es que cada capa es independiente de las demás, lo que facilita
+el mantenimiento, la escalabilidad y el reemplazo de tecnologías sin afectar otras capas del sistema.
+Capa de Presentación
+La Capa de Presentación es responsable de manejar la interacción del usuario con el sistema. En este
+caso, utilizaremos tecnologías como ASP.NET Core MVC o Blazor para crear una interfaz web
+robusta que permita a los usuarios interactuar con los casos de uso del sistema.
+Los usuarios, como asegurados, personal administrativo y proveedores, interactuaron con la interfaz
+para:
+Registrar siniestros mediante formularios, donde podrán subir fotos y documentos relacionados con el
+siniestro vehicular (CUS01).
+Ingresar reclamaciones (CUS02) y seguir el estado del siniestro (CUS03), con acceso en tiempo real a
+la información.
+Gestionar usuarios por parte del personal administrativo cuando los clientes se registren
+presencialmente en una sede (CUS06).
+Capa de Negocio (Lógica de Aplicación)
+La Capa de Negocio es el corazón del sistema. Esta capa se encarga de implementar la lógica
+empresarial, procesar las reglas del negocio y coordinar el flujo de datos entre la capa de presentación
+y la capa de persistencia. En el caso del sistema de cronología del siniestro, se encargará de:
+Validar las pólizas y verificar si el asegurado tiene una póliza activa cuando se presenta un siniestro
+(CUS05).
+Asignar talleres para siniestros relacionados con colisiones o daños que requieran reparaciones
+(CUS04).
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+Gestionar presupuestos y aprobar pagos de indemnización (CUS07 y CUS08) de acuerdo con las
+reglas de negocio.
+Generar reportes detallados para que los administradores puedan analizar y elaborar presupuestos
+basados en siniestros (CUS09).
+
+Capa de Persistencia
+La Capa de Persistencia es fundamental en el sistema de cronología del siniestro, ya que es la
+encargada de gestionar la interacción entre los objetos del dominio (como siniestros, pólizas, usuarios,
+etc.) y el repositorio permanente donde se almacenan estos datos. Esta capa es responsable de
+asegurar que la información crítica, como registros de siniestros, pólizas activas, presupuestos y pagos
+de indemnización, se mantenga de manera consistente, segura y disponible para el resto del sistema.
+Responsabilidades principales de la capa de persistencia:
+Almacenamiento de datos permanentes: La capa de persistencia garantiza que toda la información
+necesaria para el sistema esté almacenada de forma permanente y sea recuperable en cualquier
+momento. En este caso, los siniestros, pólizas, presupuestos, reclamaciones y usuarios se guardan en
+una base de datos SQL Server.
+Gestión de transacciones: Cuando se realizan varias operaciones de base de datos (por ejemplo, al
+registrar un siniestro, validar la póliza y generar un presupuesto), la capa de persistencia asegura que
+las transacciones sean atómicas, consistentes, aisladas y duraderas (ACID). Esto significa que, si
+ocurre un error durante una operación, la transacción puede revertirse para mantener la integridad de
+los datos.
+Mapeo objeto-relacional (ORM): En sistemas modernos como los desarrollados con .NET, la capa de
+persistencia puede hacer uso de Entity Framework (EF), un ORM que permite interactuar con la base
+de datos de forma más sencilla y natural, traduciendo las operaciones de la aplicación en consultas
+SQL y asegurando que los objetos del dominio se correspondan con tablas y registros en la base de
+datos.
+Acceso controlado a los datos: Esta capa proporciona servicios para acceder a los datos a través de
+repositorios o DAO (Data Access Objects), que abstraen las consultas SQL específicas y exponen
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+métodos más amigables y fáciles de usar en la lógica de negocio. Esto significa que la capa de
+negocio no necesita saber los detalles de cómo se realiza una consulta en la base de datos;
+simplemente llama a un método del repositorio que se encarga de ello.
+Optimización de consultas y acceso a datos: Con el uso de SQL Server y herramientas como Entity
+Framework, la capa de persistencia puede gestionar el acceso eficiente a los datos mediante el uso de
+índices, consultas parametrizadas, y estrategias de caching. Esto es particularmente importante en
+operaciones complejas, como la generación de reportes de siniestros o la validación de grandes
+volúmenes de datos.
+
+5.2.
+
+Arquitectura lógica de la aplicación
+5.2.1.
+
+5.3.
+
+Visión general
+
+Identificación de las clases del diseño
+5.3.1.
+
+Diagramas de secuencias
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+5.3.1.1.
+
+CUS-001: Presentar siniestro
+
+5.3.1.2.
+
+CUS-002: Ingresar reclamación
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+5.3.1.3.
+
+CUS-003: Gestionar seguimiento de siniestro
+
+5.3.1.4.
+
+CUS-004: Asignar taller a siniestro
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+5.3.1.5.
+
+CUS-005: Validar datos de póliza
+
+5.3.1.6.
+
+CUS-006: Mantener Usuario
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+5.3.1.7.
+
+CUS-007: Gestionar Presupuesto
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+5.3.1.8.
+
+CUS-008: Gestionar pagos de indemnización
+
+5.3.1.9.
+
+CUS-009: Generar reporte
+
+5.3.1.10.
+
+CUS-010: Gestión de talleres y proveedores
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+5.3.2.
+
+Diagrama de subsistemas
+
+● Subsistema de Gestión de siniestro
+○ Presentar siniestro
+■ IU Presentar siniestro
+■ Gestor Presentar siniestro
+■ Siniestro
+■ Documento
+○ Gestionar seguimiento de siniestro
+■ IU Gestionar seguimiento
+■ IU MostrarEstadoSiniestro
+■ Gestor SeguimientoSiniestro
+■ Siniestro
+○ Ingresar reclamación
+■ IU Ingresar reclamación
+■ Gestor Reclamación
+■ Reclamación
+■ Documento
+● Subsistema de Gestión de Usuario y Póliza
+○ Mantener usuario
+■ IU Mantener Usuario
+■ Gestor Mantener Usuario
+■ Asegurado
+○ Validar datos de poliza
+■ IU Validar poliza
+■ Gestor Validar poliza
+■ Poliza
+■ Asegurado
+● Subsistema de Gestión de Talleres y Asegurados
+○ Asignar taller a siniestro
+■ IU Buscar Siniestro
+■ IU Seleccionar Taller
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+■ IU ConfirmarAsignación
+■ Gestor AsignarTaller
+■ Siniestro
+■ Taller
+■ Proveedor
+● Subsistema de Gestión de Presupuestos e Indemnizaciones
+○ Gestionar presupuesto
+■ IU GestionarPresupuesto
+■ Gestor GestorGestionarPresupuesto
+■ Siniestro
+■ Presupuesto
+○ Gestionar pagos de indemnización
+■ IU GestionarIndemnizacion
+■ IU ProcesarIndemnizacion
+■ Gestor ListaSiniestros
+■ Gestor Presupuesto
+■ Gestor Asegurados
+■ Asegurado
+○ Generar reporte
+■ IU GenerarReporte
+■ Gestor GenerarReportes
+■ Siniestro
+● Subsistema de Proveedores y Talleres
+○ Gestionar talleres y proveedores
+■ IU GestiónTallerProveedores
+■ Gestor TallerProveedores
+■ Taller
+■ Proveedores
+
+5.4.
+
+Agrupación de clases de diseño en subsistema del paquete Gestión de
+siniestros
+5.4.1.
+
+Presentar Siniestro
+
+Clase: Interfaz Presentar Siniestro
+RESPONSABILIDADES
+Hace una llamada a la Interfaz que genera el
+formulario del siniestro
+
+COLABORACIONES
+Clase: Interfaz menú principal
+
+Hace una llamada a la Interfaz que genera el
+mensaje de confirmación
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+Clase: Gestor Presentar Siniestro
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Enviar datos del siniestro
+
+Clase: Interfaz presentar siniestro
+
+Clase: Siniestro
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Registrar siniestro
+
+Clase: Gestor Presentar Siniestro
+
+Clase: Documento
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Adjuntar documentos
+
+Clase: Gestor Presentar Siniestro
+
+5.4.2.
+
+Ingresar reclamación
+
+Clase: Interfaz Ingresar Reclamación
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Hace una llamada a la Interfaz que genera el Clase: Interfaz menú principal
+formulario de reclamación
+Hace una llamada a la Interfaz que genera el
+mensaje de confirmación
+
+Clase: Gestor Reclamación
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Enviar reclamación
+
+Clase: Interfaz ingresar reclamación
+
+Clase:Reclamación
+RESPONSABILIDADES
+
+COLABORACIONES
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+Registrar reclamación
+
+Clase:Gestor reclamación
+
+Clase: Documento
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Adjuntar documentos
+
+Clase: Gestor reclamación
+
+5.4.3.
+
+Gestionar seguimiento de siniestro
+
+Clase: Interfaz Gestionar seguimiento
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Hace una llamada a la Interfaz que genera el Clase: Interfaz menú principal
+formulario de datos del vehículo
+
+Clase: Interfaz Mostrar Estado Siniestro
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Hace una llamada a la Interfaz para mostrar el Clase: Interfaz menú principal
+estado del siniestro
+
+Clase: Gestor seguimiento siniestro
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Procesar la consulta del asegurado al recibir la placa Clase: Interfaz gestionar siniestro
+del vehículo(Consultar estado del siniestro)
+
+Clase: Siniestro
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Consultar Estado Siniestro
+
+Clase:Gestor seguimiento siniestro
+
+Enviar Estado Siniestro
+Diagrama de clases:
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+5.5.
+
+Agrupación de clases de diseño en subsistema del paquete Gestión de
+Usuarios y Pólizas
+5.5.1.
+
+Validar datos de póliza
+
+Clase: Interfaz Validar Póliza
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Mostrar la lista de pólizas disponibles.
+
+Clase: Interfaz menú principal
+
+mostrar los detalles de la póliza.
+Muestra el mensaje de confirmación de validación Clase: Gestor Validar Póliza
+de la póliza.
+Clase: Gestor Validar Póliza
+
+Clase: Gestor Validar Póliza
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Obtener la lista de pólizas disponibles.
+
+Clase: Poliza
+
+Verificar los detalles de la póliza seleccionada.
+Validar la póliza una vez revisada por el personal. Clase: Póliza
+Actualizar el estado de la póliza a "Validada".
+Clase: Cliente
+Clase : Poliza
+
+Clase: Póliza
+RESPONSABILIDADES
+Proporcionar
+seleccionada.
+
+los
+
+detalles
+
+COLABORACIONES
+de
+
+la
+
+póliza Clase: Gestor Validar Póliza
+
+Actualizar el estado de la póliza cuando se
+valida.
+
+Clase: Gestor Validar Póliza
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+Clase: Asegurado
+RESPONSABILIDADES
+Verificar la identidad del cliente asociado a la
+póliza.
+
+5.5.2.
+
+COLABORACIONES
+Clase: Gestor Validar Póliza
+
+Mantener Usuario
+
+Clase: Interfaz Mantener Usuario
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Mostrar la lista de usuarios.
+
+Clase: Interfaz menú principal
+
+Hace una llamada a la Interfaz que genera el Clase: Gestor Mantener Usuario
+formulario de agregar o modificar usuario.
+Muestra el mensaje de confirmación tras agregar,
+modificar o eliminar un usuario.
+
+Clase: Gestor Mantener Usuario
+
+Clase: Gestor Mantener Usuario
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Obtener la lista de usuarios registrados.
+
+Clase: asegurado
+
+Procesar la creación, modificación o eliminación de Clase: Asegurado
+un usuario.
+Clase: Asegurado
+Validar los datos ingresados para la creación o
+modificación.
+
+Clase: Asegurado
+RESPONSABILIDADES
+
+COLABORACIONES
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+Registrar los datos de un nuevo usuario.
+
+Clase: Gestor Mantener Usuario
+
+Actualizar los datos de un usuario existente.
+
+Clase: Gestor Mantener Usuario
+
+Eliminar o desactivar un usuario registrado.
+
+Clase: Gestor Mantener Usuario
+
+5.6.
+
+Agrupación de clases de diseño en subsistema del paquete Subsistema de
+Gestión de Talleres y Asegurados
+5.6.1.
+
+Asignar taller a siniestro
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+Clase: Interfaz Buscar Siniestro
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Mostrar el formulario para que el asegurado ingreseClase: Interfaz menú principal
+el código del siniestro
+
+Clase: Interfaz Seleccionar Taller
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Mostrar los detalles del siniestro y la lista de talleres Clase: Gestor Asignar taller
+disponibles.
+
+Clase: Interfaz Confirmar asignación
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Mostrar la información del taller seleccionado y Clase: Gestor Asignar taller
+confirmar la asignación
+
+Clase: Gestor Asignar Taller
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Procesar el código del siniestro para obtenerClase: Interfaz buscar siniestro
+detalles del mismo.
+Llamar al método mostrar Detalles del taller
+
+Clase: Interfaz seleccionar taller
+
+Procesar la asignación del taller seleccionado al
+siniestro.
+Clase: Interfaz confirmar asignación
+
+Clase: Siniestro
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Obtener detalles siniestro
+
+Clase: Gestor asignar taller
+
+Enviar detalles siniestro
+
+Clase: Taller
+RESPONSABILIDADES
+
+COLABORACIONES
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+Obtener detalles taller
+
+Clase: Gestor asignar taller
+
+Enviar detalles taller
+
+Clase: Proveedor
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Consultar los proveedores de los talleres
+
+Clase: Gestor asignar taller
+
+Lista talleres disponibles asociados al proveedor
+Diagrama de clases:
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+5.7.
+
+Agrupación de clases de diseño en subsistema del paquete Gestión de
+Presupuestos e Indemnizaciones
+5.7.1.
+
+Gestionar presupuesto
+
+Clase: Interfaz Gestionar Presupuesto
+RESPONSABILIDADES
+Hace una llamada a la Interfaz que genera la lista de
+siniestros.
+
+COLABORACIONES
+Clase: Interfaz menú principal
+
+Hace una llamada a la Interfaz que genera los
+detalles del presupuesto
+Muestra el mensaje de confirmación de aprobación
+: Clase: Gestor Gestionar Presupuesto
+del presupuesto.
+
+Clase: Gestor Gestionar Presupuesto
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Enviar los datos del presupuesto para revisión.
+
+Clase: Interfaz Gestionar Presupuesto
+
+Actualizar el estado del presupuesto a "aprobado".
+
+Clase: Presupuesto
+
+Solicitar los detalles del presupuesto.
+
+: Clase Presupuesto
+
+Clase: Siniestro
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Proporcionar la lista de siniestros asociados con
+presupuestos
+
+Clase: Gestor Gestionar Presupuesto
+
+Clase: Presupuesto
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Proporcionar los detalles del presupuesto del
+siniestro.
+
+Clase: Gestor Gestionar Presupuesto
+Clase: Gestor Gestionar Presupuesto
+
+Actualizar el estado del presupuesto tras la
+validación.
+
+5.7.2.
+
+Gestionar pagos de indemnización
+
+Clase: Interfaz gestionar pagos de indemnización
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Hace una llamada a la Interfaz procesar pago de
+indemnización
+
+Clase: Interfaz menú principal
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+Clase: Interfaz procesar pago de indemnización
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Hace una llamada a la Interfaz procesar pago de Clase: Interfaz gestionar pagos de indemnización
+indemnización
+Clase: ListaSiniestros
+Hacer una llamada a la clase ListarSiniestros
+
+Clase: Gestor presupuesto
+RESPONSABILIDADES
+
+Comprobar presupuesto
+
+COLABORACIONES
+
+Clase: Interfaz procesar pago de indemnización
+Clase: Gestor asegurados
+
+Clase: Gestor asegurados
+RESPONSABILIDADES
+Comprobar Asegurado
+
+COLABORACIONES
+Clase: Interfaz procesar pago de indemnización
+Clase: Asegurado
+
+Clase: Asegurado
+RESPONSABILIDADES
+Guardar datos del asegurado
+
+COLABORACIONES
+Clase: Gestor asegurados
+
+Siniestro()
+setSiniestro(String estado)
+getSiniestro()
+Diagrama de clases de diseño:
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+5.7.3.
+
+Generar reporte
+
+Clase: Interfaz Generar Reporte
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Hace una llamada a la Interfaz que genera el reporte
+del siniestro
+
+Clase: Interfaz menú principal
+
+Clase: Gestor Generar Reporte
+RESPONSABILIDADES
+Generar el reporte del siniestro
+
+COLABORACIONES
+Clase: Interfaz de generar reporte
+Clase: Siniestro
+Clase: Asegurado
+Clase: Poliza
+
+Clase: Siniestro
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Elaborar reporte
+
+Clase: Gestor Reporte del siniestro
+
+Visualizar reporte
+
+Clase: Asegurado
+Clase: Poliza
+
+5.8.
+
+Agrupación de clases de diseño en subsistema del paquete Gestión de
+Proveedores y Talleres
+5.8.1.
+Gestionar talleres y proveedores
+
+Clase: Interfaz Gestionar Taller y Proveedores
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Hacer una llamada a la interfaz que genera la
+lista de talleres y proveedores
+
+Clase: Interfaz Principal
+
+Clase: Interfaz Añadir Taller y Proveedor
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Registrar datos del taller o proveedor.
+
+Clase: Interfaz Añadir Taller y Proveedor
+
+Mostrar la confirmación de añadir un proveedor
+o taller.
+
+Clase: Taller
+Clase: Proveedor
+
+Guardar la información añadida a la lista
+
+Clase: Interfaz Eliminar Taller y Proveedor
+RESPONSABILIDADES
+Selecciona el taller o proveedor que desee
+eliminar.
+Mostrar la confirmación de eliminación de un
+proveedor o taller.
+
+COLABORACIONES
+Clase: Interfaz Eliminar Taller Proveedor
+Clase: Taller
+Clase: Proveedor
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+Clase: Interfaz Editar Taller y Proveedor
+RESPONSABILIDADES
+
+COLABORACIONES
+
+Seleccionar el taller o proveedor que editaremos.
+
+Clase: Interfaz Editar Taller y Proveedor
+
+Mostrar la confirmación de editar un proveedor
+o taller.
+
+Clase: Taller
+Clase: Proveedor
+
+Guardar los cambios ingresados al taller o
+proveedor.
+
+Diagrama de clases de diseño:
+
+6.
+
+Vista despliegue
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+7.
+
+Vista de implementación
+7.1.
+En esta vista de implementación se presenta el sistema en términos de
+subsistemas, cada uno con interfaces específicas que facilitan la comunicación
+entre los módulos principales. Nos enfocaremos en la organización de los
+subsistemas y sus interfaces para estructurar el flujo de información dentro del
+proceso de siniestros vehiculares.
+Se ha decidido dividir el sistema en cinco subsistemas clave:
+Gestión de usuario y póliza: Este subsistema incluye todas las actividades
+relacionadas con el manejo de datos de usuarios y pólizas. Mediante la interfaz
+IGestión de usuario y póliza, otros subsistemas pueden validar los datos del
+usuario y la póliza activa al registrar un siniestro.
+Gestión de siniestro: Este subsistema maneja todo el proceso de registro y
+administración de siniestros vehiculares. A través de la interfaz IGestión de
+siniestro, otros módulos pueden acceder a la información del siniestro, su estado
+y cualquier acción que esté asociada, como asignar talleres.
+Gestión de talleres y asegurados: Este subsistema organiza y gestiona los
+talleres disponibles y asignados para la reparación de vehículos siniestrados, así
+como la relación con los asegurados. Mediante la interfaz IGestión de talleres y
+asegurados, permite que Gestión de siniestro asigne talleres a los casos de
+siniestro registrados.
+Gestión de Presupuestos e Indemnizaciones: Este subsistema permite la
+generación de presupuestos y la gestión de los pagos de indemnización para
+cada siniestro. Con la interfaz IGestión de Presupuestos e Indemnizaciones, los
+módulos pueden solicitar la elaboración de presupuestos y procesar los pagos
+de indemnización.
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+Gestión de proveedores y talleres: Este subsistema permite al administrador
+mantener y actualizar la base de datos de proveedores y talleres disponibles. A
+través de la interfaz IGestión de proveedores y talleres, se gestiona el registro
+de proveedores y los talleres asociados.
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+7.2.
+
+Diagrama de componentes
+7.2.1.
+Actividad implementar un subsistema
+
+● Subsistema de Gestión de siniestro
+○ Componente Siniestro
+■ Interfaz Presentar Siniestro
+■ Interfaz Gestionar seguimiento
+■ Interfaz Mostrar Estado Siniestro
+■ Siniestro
+■ Documento
+○ Componente Gestor Siniestro
+■ Gestor Presentar siniestro
+■ Gestor Seguimiento siniestro
+○ Componente Reclamación
+■ IU Ingresar reclamación
+■ Reclamación
+■ Documento
+○ Componente Gestor Reclamación
+■ Gestor Reclamación
+○ Componente Documento
+■ Documento
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+● Subsistema de Gestión de Usuario y Póliza
+○ Componente Usuario
+■ Interfaz Mantener Usuario
+■ Asegurado
+○ Componente Gestor Usuario
+■ Gestor Mantener Usuario
+○ Componente Póliza
+■ Interfaz Validar póliza
+■ Póliza
+■ Asegurado
+○ Componente Gestor Póliza
+■ Gestor Validar póliza
+○ Componente Asegurado
+■ Asegurado
+
+● Subsistema de Gestión de Talleres y Asegurados
+○ Componente Taller_Siniestro
+■ Interfaz Buscar Siniestro
+■ Interfaz Seleccionar Taller
+■ Interfaz ConfirmarAsignación
+■ Siniestro
+■ Taller
+■ Proveedor
+○ Componente Gestor Taller_Siniestro
+■ Gestor AsignarTaller
+○ Componente Taller
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+■ Taller
+○ Componente Proveedor
+■ Proveedor
+○ Componente Siniestro
+■ Siniestro
+
+● Subsistema de Gestión de Presupuestos e Indemnizaciones
+○ Componente presupuesto
+■ Interfaz GestionarPresupuesto
+■ Siniestro
+■ Presupuesto
+○ Componente Gestor presupuesto
+■ Gestor GestorGestionarPresupuesto
+○ Componente Indemnización
+■ Interfaz GestionarIndemnizacion
+■ Interfaz ProcesarIndemnizacion
+■ Asegurado
+○ Componente Gestor Indemnización
+■ Gestor ListaSiniestros
+■ Gestor Presupuesto
+■ Gestor Asegurados
+○ Componente reporte
+■ IU GenerarReporte
+■ Siniestro
+○ Componente Gestor reporte
+■ Gestor GenerarReportes
+○ Componente Presupuesto
+■ Presupuesto
+○ Componente Asegurado
+■ Asegurado
+○ Componente Siniestro
+■ Siniestro
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+● Subsistema de Proveedores y Talleres
+○ Componente Talleres_Proveedor
+■ IU GestiónTallerProveedores
+■ Taller
+■ Proveedor
+○ Componente Gestor Talleres_Proveedor
+■ Gestor TallerProveedores
+○ Componente Taller
+■ Taller
+○ Componente Proveedor
+■ Proveedor
+
+Diagrama general de componentes
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+8.
+
+Vista de datos
+8.1.
+
+Modelo relacional
+
+8.2.
+
+Tipo de base de datos: Base de datos centralizada
+
+Una base de datos centralizada es una elección lógica para esta arquitectura de sistema de
+seguros debido a la necesidad de mantener datos consistentes, seguros, y fáciles de administrar,
+lo cual es esencial para el manejo de información sensible y de gran volumen en una empresa
+de seguros
+Por algunos motivos:
+Integridad y Consistencia de los Datos
+Al mantener los datos en una ubicación central, se asegura que todos los módulos y usuarios
+accedan a una fuente única de verdad. Esto es crucial en una aplicación de seguros donde la
+precisión de la información es vital, especialmente en procesos como la validación de pólizas,
+la gestión de siniestros, y el cálculo de indemnizaciones.
+Facilidad de Mantenimiento y Administración
+
+__________________________________________________________________________________
+
+Diseño de sistemas web de
+información
+__________________________________________________________________________________
+
+La gestión de una base de datos centralizada simplifica las tareas de administración, respaldo
+y recuperación. Al concentrar toda la información en un solo lugar, los administradores de la
+base de datos pueden realizar estas tareas de manera más eficiente, reduciendo la complejidad
+de coordinar múltiples bases de datos.
+Optimización del Rendimiento
+Una base de datos centralizada permite optimizar el acceso a los datos para aplicaciones que
+realizan consultas complejas o que requieren grandes volúmenes de información, como los
+cálculos de siniestros o la generación de reportes de pólizas.
+Control Centralizado de la Seguridad
+En un entorno de seguros, la información personal y financiera de los clientes debe ser
+protegida. Una base de datos centralizada permite implementar políticas de seguridad, como el
+cifrado y los permisos de acceso, de forma centralizada, reduciendo el riesgo de fugas de
+información y facilitando el cumplimiento de normas de protección de datos.
+Escalabilidad para Crecimiento Futuro
+A medida que la empresa de seguros crece, se pueden agregar más datos y módulos sin la
+necesidad de replicar bases de datos. La centralización permite escalar verticalmente
+(mejorando el servidor) o horizontalmente (con más capacidad de procesamiento) sin
+reestructurar el sistema de bases de datos.
+Compatibilidad con la Arquitectura de Tres Capas (Presentación, Lógica y Datos)
+En una arquitectura de tres capas como la que estás implementando (Presentación, Aplicación
+y Persistencia), una base de datos centralizada en la capa de Persistencia se alinea
+perfectamente con el modelo. La capa de aplicación puede gestionar el acceso y las reglas de
+negocio, mientras que la base de datos centralizada permite que todos los módulos accedan a
+una fuente única de datos en la capa de persistencia.
+
+__________________________________________________________________________________
+
+
